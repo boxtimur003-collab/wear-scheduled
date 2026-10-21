@@ -18,16 +18,18 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || true
+      - name: Install SDK packages
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Build Phone APK
-        run: ./gradlew :phone:assembleDebug || gradle :phone:assembleDebug
+        run: ./gradlew :phone:assembleDebug
 
       - name: Build Wear APK
-        run: ./gradlew :wear:assembleDebug || gradle :wear:assembleDebug
+        run: ./gradlew :wear:assembleDebug
 
       - name: Upload Phone APK
         uses: actions/upload-artifact@v4
