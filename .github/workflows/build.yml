@@ -19,7 +19,12 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK Packages
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Download gradle-wrapper.jar
         run: |
@@ -30,8 +35,6 @@ jobs:
         run: |
           if [ -f "gradlew" ]; then
             chmod +x gradlew
-          else
-            echo "gradlew not found, skipping chmod"
           fi
 
       - name: Build Phone APK
