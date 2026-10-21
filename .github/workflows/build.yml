@@ -18,19 +18,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Download gradle-wrapper.jar
-        run: |
-          mkdir -p gradle/wrapper
-          curl -L -o gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v8.1.0/gradle/wrapper/gradle-wrapper.jar
-
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build Phone APK
-        run: ./gradlew :phone:assembleDebug
+        run: gradle :phone:assembleDebug
 
       - name: Build Wear APK
-        run: ./gradlew :wear:assembleDebug
+        run: gradle :wear:assembleDebug
 
       - name: Upload Phone APK
         uses: actions/upload-artifact@v4
